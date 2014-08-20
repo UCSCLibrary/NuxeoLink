@@ -1,0 +1,65 @@
+
+#nuxeo-preview > label {
+    float: right;
+    font-size: 1.1em;
+    position: relative;
+    right: 15px;
+    top: -25px;
+}
+
+#tree {
+    max-height: 500px;
+    overflow-y: auto;
+    float:left;
+    clear:left;
+    width:35%;
+}
+#nuxeo-preview {
+    max-height: 500px;
+    overflow-y: auto;
+    float:left;
+    width:65%
+}
+
+#preview-list li {
+    line-height:75px;
+    overflow:hide;
+    border-top: 1px solid #000000;
+}
+#preview-list li p {
+    float: right;
+    font-size: 1.1em;
+    margin-bottom: 0;
+    margin-top: 0;
+    max-height: 75px;
+    max-width: 206px;
+    padding-right: 5px;
+    padding-top: 5px;
+    text-align: right;
+}
+#preview-list li input{
+    margin-right: 5px;
+}
+#preview-list li img {
+    height:62px;
+    width:62px;
+    vertical-align:middle;
+    max-width:100px;
+}
+
+#preview-list {
+    list-style-type:none;
+}
+
+#select-buttons {
+    margin-left:30%;
+}
+#select-buttons button {
+    margin-bottom:0;
+}
+
+#fieldset-submit_buttons input {
+    margin-left: 40%;
+    margin-right: auto;
+    margin-top: 15px;
+}
