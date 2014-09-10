@@ -148,6 +148,19 @@ class NuxeoDocument {
         return $this->object['facets'];
     }
 
+    public function getImageInfo() {
+        $width = 0;
+        foreach($this->properties['picture:views'] as $view) {
+            if($view['content']['mime-type'] == 'image/tiff' || $view['content']['mime-type'] == 'image/tiff-fx')
+                continue;
+            if($view['width'] > $width) {
+                $width = $view['width'];
+                $retView = $view;
+            }
+        }
+        return $retView['content'];  
+    }
+
     Public function output() {
         $value = sizeof($this->object);
 

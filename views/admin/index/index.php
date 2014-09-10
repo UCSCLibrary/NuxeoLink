@@ -1,4 +1,4 @@
-\<?php
+<?php
 
 $head = array('bodyclass' => 'nuxeo-link primary', 
               'title' => html_escape(__('NuxeoLink | Import documents')));

@@ -30,7 +30,7 @@ function warnDeleteSchema() {
 
 function addDamsBrowser() {
 
-    jQuery('#fieldset-fields').append('<div id="tree_div"><div id="tree" style="float:left;clear:left;"></div><div id="nuxeo-preview"></div></div>');
+    jQuery('.nuxeo-link #fieldset-fields').append('<div id="tree_div"><div id="tree" style="float:left;clear:left;"></div><div id="nuxeo-preview"></div></div>');
     var topUid = 'd0ba6352-44c6-4f25-b9f9-667131d3eaf2';
 
     jQuery('#tree').jstree({

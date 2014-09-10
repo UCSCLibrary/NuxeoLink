@@ -132,9 +132,16 @@ class NuxeoOmekaSession extends NuxeoSession {
             $item->setPostData($post);
             $item->save();
 
-            $fileInfo = $doc->getProperty('file:content');
+
+            //This returns the primary file associated with the nuxeo item, which is bad because those are sometimes sensitive. 
+            //$fileInfo = $doc->getProperty('file:content');
+            $fileInfo = $doc->getImageInfo();
+            
             $filePath = $fileInfo['data'];
             $fileName = $fileInfo['name'];
+
+            
+
             $this->addFile($filePath,$fileName,$item);
         }
     }
