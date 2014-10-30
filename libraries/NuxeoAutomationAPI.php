@@ -140,12 +140,14 @@ class NuxeoDocument {
     }
 
     public function getThumbPath() {
+        if(!isset($this->properties['picture:views']))
+            return false;
         foreach($this->properties['picture:views'] as $view) {
           if($view['title']=='Thumbnail'||$view['tag']=='thumb') {
               return $view['content']['data'];
           }
       }
-        return $this->object['facets'];
+        return false;
     }
 
     public function getImageInfo() {

@@ -14,6 +14,11 @@
  */
 class NuxeoLinkPlugin extends Omeka_plugin_AbstractPlugin
 {
+    public function __toString() 
+    {
+        return $this->name;
+    }
+    
     /**
      * @var array Hooks for the plugin.
      */

@@ -140,8 +140,6 @@ class NuxeoOmekaSession extends NuxeoSession {
             $filePath = $fileInfo['data'];
             $fileName = $fileInfo['name'];
 
-            
-
             $this->addFile($filePath,$fileName,$item);
         }
     }
@@ -246,7 +244,9 @@ class NuxeoOmekaSession extends NuxeoSession {
                 'type'=>$doc->getType()
             );
             if(in_array('Thumbnail',$doc->getFacets())) {
-                $newDoc['thumb'] = htmlspecialchars($this->getUrlLoggedIn().'/'.$doc->getThumbPath());
+                $thumbpath =  $doc->getThumbPath();
+                if(!is_array($thumbpath))
+                    $newDoc['thumb'] = htmlspecialchars($this->getUrlLoggedIn().'/'.$thumbpath);
             }
             $docs[] = $newDoc;
         }
