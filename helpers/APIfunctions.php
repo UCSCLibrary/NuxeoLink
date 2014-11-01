@@ -45,39 +45,42 @@ class NuxeoOmekaSession extends NuxeoSession {
             'modified'=>'Date Modified'
         ),
         'ucldc_schema'=>array(
-            'rightsstatus' =>'Rights Status',
+            //'rightsstatus' =>'Rights Status',
+            
             'campusunit' => 'Campus Unit',
-            'localidentifier' => 'Local Identifier',
-            'rightsnotice' => 'Rights Notice',
-            'language' => 'Language',
-            'relatedresource' => 'Related Resource',
-            'source' => 'Source',
-            'alternativetitle' => 'Alternative Title',
+            'localidentifier' => 'dc:Identifier',
+            'rightsnotice' => 'dc:Rights',
+            'language' => 'dc:Language',
+            'relatedresource' => 'dc:Relation',
+            'source' => 'dc:Source',
+            'alternativetitle' => 'AlternativeTitle',
             'collection' => 'Collection',
             'formgenre' => 'Form Genre',
-            'identifier' => 'Identifier',
+            'identifier' => 'dc:Identifier',
             'rightsstartdate' => 'Rights Start Date',
-            'rightsstatement' => 'Rights Statement',
-            'type' => 'Type',
+            'rightsstatement' => 'dc:Rights',
+            'type' => 'dc:Type',
             'physlocation' => 'Physical Location',
-            'temporalcoverage' => 'Temporal Coverage',
+            'temporalcoverage' => 'dc:Coverage',
             'rightsdeterminationdate' => 'Rights Determination Date',
-            'date' => 'Date',
-            'subjecttopic' => 'Subject Topic',
+            'date' => 'dc:Date',
+            //'subjecttopic' => 'Subject Topic',
+            'subjecttopic' => 'dc:Subject',
             'rightsholder' => 'Rights Holder',
-            'creator' => 'Creator',
+            'creator' => 'dc:Creator',
             'rightsjurisdiction' => 'Rights Jurisdiction',
-            'rightscontact' => 'Rights Contact',
-            'accessrestrict' => 'AccessRestrict',
-            'publisher' => 'Publisher',
-            'contributor' => 'Contributor',
+            //'rightscontact' => 'Rights Contact',
+            'rightscontact' => 'dc:Rights',
+            //'accessrestrict' => 'AccessRestrict',
+            'publisher' => 'dc:Publisher',
+            'contributor' => 'dc:Contributor',
             'subjectname' => 'Subject Name',
-            'rightsnote' => 'Rights Note',
+            'rightsnote' => 'dc:Rights',
             'provenance' => 'Provenance',
             'rightsenddate' => 'Rights End Date',
-            'description' => 'Description',
+            'description' => 'dc:Description',
             'place' => 'Place',
-            'physdesc'=>'Physical Description'
+            'physdesc'=>'dc:format'
         )
     );
 
@@ -166,26 +169,32 @@ class NuxeoOmekaSession extends NuxeoSession {
     }
 
     private function _getPostElements($doc) {
-        //TODO set this option on startup to include Dublin Core and UCLDC_Schema
         $knownSchema = unserialize(get_option('nuxeoKnownSchema'));
         $elementTable = get_db()->getTable('Element');   
         $properties = array();
         $props = $doc->getProperties();
-        
-        foreach($props as $propkey=>$propval) {
 
+        foreach($props as $propkey=>$propval) {
+            
             $propkeys = explode(':',$propkey);
             $schema=$propkeys[0];
+            $property=$propkeys[1];
+            
+            if($property == 'type' && $propval != 'image')
+                continue;
+          
+            if($property == 'accessrestrict' && $propval!='public')
+                continue;
+            
+            $property = $this->_filterProperty($schema,$property);
+
             if(!isset($knownSchema[$schema]))
                 continue;
-
-            $property=$propkeys[1];
-                
-            $property = $this->_filterProperty($schema,$property);
 
             $element = $elementTable->findByElementSetNameAndElementName($knownSchema[$schema],ucfirst($property));
 
             if(is_array($propval)) {
+                
                 $propval = array_filter($propval);
                 if(empty($propval))
                     continue;
@@ -196,6 +205,20 @@ class NuxeoOmekaSession extends NuxeoSession {
             }
 
             foreach($propval as $val) {
+                if(is_array($val)) {
+                    if(array_key_exists('date',$val))
+                        $val=$val['date'];
+                    
+                    else if(array_key_exists('name',$val))
+                        $val=$val['name'];
+                    
+                    else if(array_key_exists('heading',$val))
+                        $val=$val['heading'];
+                    
+                    else if(array_key_exists('item',$val))
+                        $val=$val['item'];
+                }
+
                 $html = false;
                 if($val != strip_tags($val)) 
                     $html = true;
@@ -216,12 +239,19 @@ class NuxeoOmekaSession extends NuxeoSession {
         return($properties);
     }
 
-    private function _filterProperty($schema,$property){
+    private function _filterProperty(&$schema,$property){
         $maps = $this->_propertyMaps;
         if(!isset($maps[$schema]))
             return $property;
-        if(array_key_exists($property,$maps[$schema])) 
-            return $maps[$schema][$property];
+        if(array_key_exists($property,$maps[$schema])) {
+            if(!strpos(':',$maps[$schema][$property]))
+                return $maps[$schema][$property];
+            else {
+                $ps = explode(':',$maps[$schema][$property]);
+                $schema = $ps[0];
+                return $ps[1];
+            }
+        }
         return $property;
 
     }

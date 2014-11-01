@@ -48,7 +48,7 @@ class NuxeoLinkPlugin extends Omeka_plugin_AbstractPlugin
      */
     public function hookInstall() {
         $this->_installOptions();
-        set_option('nuxeoKnownSchema',serialize(array('dc'=>'Dublin Core')));
+        set_option('nuxeoKnownSchema',serialize(array('dc'=>'Dublin Core','ucldc_schema'=>'UCLDC Schema')));
     }
 
     /**
