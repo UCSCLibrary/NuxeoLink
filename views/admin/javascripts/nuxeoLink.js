@@ -52,14 +52,14 @@ function addDamsBrowser() {
     jQuery('#tree').on('select_node.jstree',function(event,selectParams){
 	id = selectParams['selected'];
 	//console.log(id);
-	jQuery('#nuxeo-preview').prepend('<h3>Loading...</h3><p>Retrieving data from Nuxeo. For large datasets, this could take a minute. Thanks for your patience.</p>');
+	jQuery('#nuxeo-preview').html('<h3>Loading...</h3><p>Retrieving data from Nuxeo. For large datasets, this could take a minute. Thanks for your patience.</p>');
 	jQuery.get(
 	    docUrl+id,
 	    function(jsonData) {
 		data = jQuery.parseJSON(jsonData);
 
 		if(data.length > 0)
-		    jQuery('#nuxeo-preview').html('<div id="select-buttons"><button id="select-all" class="select-button">Select All</button><button id="select-none" class="select-button">Select None</button></div><label>'+data.length+' Documents</label><br><ul id="preview-list"></ul>');
+		    jQuery('#nuxeo-preview').html('<div id="select-buttons"><button id="select-all" class="select-button">Select All</button><button id="select-none" class="select-button">Select None</button></div><label>'+data.length+' Documents (displaying images only)</label><br><ul id="preview-list"></ul>');
 
 		jQuery.each(data,function(index,value) {
 		    if(!('thumb' in value))
