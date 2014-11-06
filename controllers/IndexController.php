@@ -28,7 +28,6 @@ class NuxeoLink_IndexController extends Omeka_Controller_AbstractActionControlle
 
   public function indexAction()
   {
-
       include_once(dirname(dirname(__FILE__))."/forms/ImportForm.php");
       $form = new Nuxeo_Form_Import();
       
@@ -86,6 +85,21 @@ class NuxeoLink_IndexController extends Omeka_Controller_AbstractActionControlle
       $client = new NuxeoOmekaImportClient(get_option('nuxeoUrl'));
       $session = $client->getSession(get_option('nuxeoUser'),get_option('nuxeoPass'));
       $docs = $session->getChildDocuments($uid);
+      $this->view->documents = $docs;
+
+  }
+
+  public function searchAction()
+  {
+
+      //require the helpers
+      require_once(dirname(dirname(__FILE__)).'/helpers/APIfunctions.php');
+
+      $uid = $this->getParam('uid');
+      $searchTerm = $this->getParam('search');
+      $client = new NuxeoOmekaImportClient(get_option('nuxeoUrl'));
+      $session = $client->getSession(get_option('nuxeoUser'),get_option('nuxeoPass'));
+      $docs = $session->fullTextSearch($uid,$searchTerm);
       $this->view->documents = $docs;
 
   }

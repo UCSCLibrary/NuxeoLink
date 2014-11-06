@@ -73,7 +73,7 @@ class NuxeoLinkPlugin extends Omeka_plugin_AbstractPlugin
     }
 
     /**
-     * Display the plugin config form.
+     * Process the plugin config form.
      */
     public function hookConfig() { 
 

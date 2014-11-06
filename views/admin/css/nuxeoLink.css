@@ -1,10 +1,44 @@
 
+
+
+#nuxeo-preview > #numDocLi {
+    font-size:1em;
+    max-width:125px;
+}
+
+
 #nuxeo-preview > label {
     float: right;
     font-size: 1.1em;
     position: relative;
     right: 15px;
     top: -25px;
+}
+
+#nuxeo-search-blurb {
+position:absolute;
+  top: 10px;
+  bottom: 0;
+  left: 75px;
+  right: 0;
+  background-color:white;
+  border:1px solid black;
+  visibility:hidden;
+  -webkit-transition: visibility opacity 0.5s;
+  height:50px;
+  width:650px;
+  padding:5px;
+  border-radius:10px;
+}
+
+#nuxeo-search-div:hover > #nuxeo-search-blurb {
+    visibility: visible;
+}
+
+#nuxeo-search-div  {
+    position:relative;
+    margin-top: 20px;
+    width:325px;
 }
 
 #tree {
@@ -20,10 +54,9 @@
     float:left;
     width:65%
 }
-
 #preview-list li {
     line-height:75px;
-    overflow:hide;
+    overflow:hidden;
     border-top: 1px solid #000000;
 }
 #preview-list li p {
@@ -32,7 +65,7 @@
     margin-bottom: 0;
     margin-top: 0;
     max-height: 75px;
-    max-width: 206px;
+    max-width: 300px;
     padding-right: 5px;
     padding-top: 5px;
     text-align: right;

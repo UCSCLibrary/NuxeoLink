@@ -84,6 +84,35 @@ class NuxeoOmekaSession extends NuxeoSession {
         )
     );
 
+    function fullTextSearch($parentUid,$searchTerm) {
+        $url = $this->getUrlLoggedIn();
+        if(strpos($url,"/automation"))
+            $url = str_replace("/automation","",$url);
+        $searchUrl = $url."/id/".$parentUid."/@search?fullText=".urlencode($searchTerm)."&orderBy=dc:title";
+
+        $data = json_decode($this->curl_download($searchUrl));
+        $data->thumbBase = $this->getUrlLoggedIn()."/files/";
+        return $data;
+        
+    }
+
+    function curl_download($Url){
+ 
+        // is cURL installed yet?
+        if (!function_exists('curl_init')){
+            die('Sorry cURL is not installed!');
+        }
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $Url);
+        curl_setopt($ch, CURLOPT_HEADER, 0);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $output = curl_exec($ch);
+        curl_close($ch);
+        return $output;
+    }
+
+
+
     function getChildFolders($uid) {
         $query="SELECT * FROM Folder WHERE ecm:parentId = '".$uid."' AND dc:title like '%'";
         return $this->_getDocs($query,$uid);
@@ -116,7 +145,6 @@ class NuxeoOmekaSession extends NuxeoSession {
 
         foreach($answer->getDocumentList() as $doc) {
             $postElements = $this->_getPostElements($doc);
-            
             $post = array(
 			 'Elements'=>$postElements,
 			 'item_type_id'=>'6',      //a still image TODO
@@ -129,17 +157,14 @@ class NuxeoOmekaSession extends NuxeoSession {
 
             if($public)
                 $post['public']="1";
-
             //todo make new item and add the post
             $item = new Item();
+            
             $item->setPostData($post);
             $item->save();
-
-
             //This returns the primary file associated with the nuxeo item, which is bad because those are sometimes sensitive. 
             //$fileInfo = $doc->getProperty('file:content');
             $fileInfo = $doc->getImageInfo();
-            
             $filePath = $fileInfo['data'];
             $fileName = $fileInfo['name'];
 
