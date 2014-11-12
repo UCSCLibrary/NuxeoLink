@@ -90,7 +90,8 @@ class NuxeoOmekaSession extends NuxeoSession {
             $url = str_replace("/automation","",$url);
         $searchUrl = $url."/id/".$parentUid."/@search?fullText=".urlencode($searchTerm)."&orderBy=dc:title";
 
-        $data = json_decode($this->curl_download($searchUrl));
+        //$data = json_decode($this->curl_download($searchUrl));
+        $data = json_decode($this->stream_download($searchUrl));
         if(empty($data))
             return false;
         $data->thumbBase = $this->getUrlLoggedIn()."/files/";
@@ -98,8 +99,20 @@ class NuxeoOmekaSession extends NuxeoSession {
         
     }
 
+    function stream_download($Url) {
+        die($Url);
+        $context_options = array(
+            'http' => array(
+                'method'=>'GET',
+                'header'=>'Accept-language: en\r\n'
+            )
+        );
+        $context = stream_context_create($context_options);
+        $contents = file_get_contents($Url,NULL,$context);
+        return $contents;
+    }
+
     function curl_download($Url){
- 
         // is cURL installed yet?
         if (!function_exists('curl_init')){
             die('Sorry cURL is not installed!');
