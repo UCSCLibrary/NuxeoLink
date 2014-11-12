@@ -100,7 +100,6 @@ class NuxeoOmekaSession extends NuxeoSession {
     }
 
     function stream_download($Url) {
-        die($Url);
         $context_options = array(
             'http' => array(
                 'method'=>'GET',
