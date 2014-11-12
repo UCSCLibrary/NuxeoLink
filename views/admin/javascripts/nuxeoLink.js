@@ -8,6 +8,7 @@ var searchUrl = 'nuxeo-link/index/search/uid/';
 function implementSearch() {
     jQuery('#nuxeo-search-button').click(function(e){
 	e.preventDefault();
+	jQuery('#nuxeo-preview').html('<h3>Searching...</h3><p>Retrieving documents containing your search terms. For large datasets, this could take a minute. Thanks for your patience.</p>');
 	selectedNodes = jQuery('#tree').jstree(true).get_top_selected(false);
 	if(selectedNodes.length > 0)
 	    id=selectedNodes[0];
@@ -19,11 +20,19 @@ function implementSearch() {
 	    url,
 	    function(jsonData) {
 		data = jQuery.parseJSON(jsonData);
+		if(typeof(data)!="object") {
+		    jQuery('#nuxeo-preview').html('<h3>Search Failed!</h3><p>Something went wrong in your search. Is something wrong with your server internet connection perhaps?</p>');
+		    return;
+		}
 		thumbBase = data.thumbBase;
 		entries = data.entries;
 		//console.log(data);
-		if(entries.length > 0)
+		if(entries.length > 0) {
 		    jQuery('#nuxeo-preview').html('<div id="select-buttons"><button id="select-all" class="select-button">Select All</button><button id="select-none" class="select-button">Select None</button></div><label id="numDocLi">'+entries.length+' Documents <div style="font-size:0.8em">(displaying images only)</div></label><br><ul id="preview-list"></ul>');
+		}else {
+		    jQuery('#nuxeo-preview').html('<h3>No Results</h3><p>Your search returned no results.</p>');
+		    return;
+		}
 
 		jQuery.each(entries,function(index,value) {
 		    thumbUrl = thumbBase+value['uid']+"";
