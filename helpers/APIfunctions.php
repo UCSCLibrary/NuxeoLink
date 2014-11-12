@@ -91,6 +91,8 @@ class NuxeoOmekaSession extends NuxeoSession {
         $searchUrl = $url."/id/".$parentUid."/@search?fullText=".urlencode($searchTerm)."&orderBy=dc:title";
 
         $data = json_decode($this->curl_download($searchUrl));
+        if(empty($data))
+            return false;
         $data->thumbBase = $this->getUrlLoggedIn()."/files/";
         return $data;
         
