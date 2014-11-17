@@ -74,7 +74,7 @@ class NuxeoOmekaSession extends NuxeoSession {
             //'accessrestrict' => 'AccessRestrict',
             'publisher' => 'dc:Publisher',
             'contributor' => 'dc:Contributor',
-            'subjectname' => 'Subject Name',
+            'subjectname' => 'dc:Subject',
             'rightsnote' => 'dc:Rights',
             'provenance' => 'Provenance',
             'rightsenddate' => 'Rights End Date',
@@ -225,8 +225,13 @@ class NuxeoOmekaSession extends NuxeoSession {
             if($property == 'accessrestrict' && $propval!='public')
                 continue;
             
+            $beforeSchema = $schema;
+            //echo '   --   beforeschema: '.$schema;
             $property = $this->_filterProperty($schema,$property);
-
+            
+            if($schema !== $beforeSchema)
+                echo '  afterschema: '.$schema;
+            
             if(!isset($knownSchema[$schema]))
                 continue;
 
@@ -280,13 +285,16 @@ class NuxeoOmekaSession extends NuxeoSession {
 
     private function _filterProperty(&$schema,$property){
         $maps = $this->_propertyMaps;
+        
         if(!isset($maps[$schema]))
             return $property;
         if(array_key_exists($property,$maps[$schema])) {
-            if(!strpos(':',$maps[$schema][$property]))
-                return $maps[$schema][$property];
-            else {
-                $ps = explode(':',$maps[$schema][$property]);
+            
+            if(!strpos($prop = $maps[$schema][$property],':')) {
+                return $prop;
+            } else {
+                echo ' !- schema:'.$schema.' Property: '.$property.' -!';
+                $ps = explode(':',$prop);
                 $schema = $ps[0];
                 return $ps[1];
             }
