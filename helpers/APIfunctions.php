@@ -42,7 +42,8 @@ class NuxeoOmekaSession extends NuxeoSession {
         'dc'=>array(
             'contributors'=>'Contributor',
             'created'=>'Date Created',
-            'modified'=>'Date Modified'
+            'modified'=>'Date Modified',
+            'creator'=>'ignored'
         ),
         'ucldc_schema'=>array(
             //'rightsstatus' =>'Rights Status',

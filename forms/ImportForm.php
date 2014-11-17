@@ -148,7 +148,9 @@ class Nuxeo_Form_Import extends Omeka_Form
         $collectionTable = get_db()->getTable('Collection');
         //$options = array('-1'=>'Create New Collection','0'=>'Assign No Collection'); TODO set up autocreate collection
         $options = array('0'=>'Assign No Collection');
-        $options = array_merge($options,$collectionTable->findPairsForSelectForm());
+        $pairs = $collectionTable->findPairsForSelectForm();
+        foreach($pairs as $key=>$value)
+            $options[$key]=$value;
         return $options;
     }
 
