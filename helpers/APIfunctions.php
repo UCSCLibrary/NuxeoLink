@@ -40,7 +40,8 @@ class NuxeoOmekaSession extends NuxeoSession {
 
     private $_propertyMaps = array(
         'dc'=>array(
-            'contributors'=>'Contributor',
+//            'contributors'=>'Contributor',
+            'contributors'=>'ignored',
             'created'=>'Date Created',
             'modified'=>'Date Modified',
             'creator'=>'ignored'
