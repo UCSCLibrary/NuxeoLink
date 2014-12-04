@@ -38,53 +38,57 @@ $session = new NuxeoOmekaSession($this->url, $this->session);
  */
 class NuxeoOmekaSession extends NuxeoSession {
 
-    private $_propertyMaps = array(
-        'dc'=>array(
+    public function __construct($url, $session, $headers = "Content-Type: application/json+nxrequest") {
+        parent::__construct($url, $session, $headers = "Content-Type: application/json+nxrequest");
+        $this->_setPropertyMaps( get_option('nuxeoUcldcSchema') == 'installed');
+    }
+
+    private $_propertyMaps = array();
+
+    private function _setPropertyMaps($use_UCLDC){
+        $this->_propertyMaps['dc'] = array(
 //            'contributors'=>'Contributor',
             'contributors'=>'ignored',
             'created'=>'Date Created',
             'modified'=>'Date Modified',
             'creator'=>'ignored'
-        ),
-        'ucldc_schema'=>array(
-            //'rightsstatus' =>'Rights Status',
-            
-            'campusunit' => 'Campus Unit',
-            'localidentifier' => 'dc:Identifier',
-            'rightsnotice' => 'dc:Rights',
-            'language' => 'dc:Language',
-            'relatedresource' => 'dc:Relation',
-            'source' => 'dc:Source',
-            'alternativetitle' => 'AlternativeTitle',
-            'collection' => 'Collection',
-            'formgenre' => 'Form Genre',
-            'identifier' => 'dc:Identifier',
-            'rightsstartdate' => 'Rights Start Date',
-            'rightsstatement' => 'dc:Rights',
-            'type' => 'dc:Type',
-            'physlocation' => 'Physical Location',
-            'temporalcoverage' => 'dc:Coverage',
-            'rightsdeterminationdate' => 'Rights Determination Date',
-            'date' => 'dc:Date',
-            //'subjecttopic' => 'Subject Topic',
-            'subjecttopic' => 'dc:Subject',
-            'rightsholder' => 'Rights Holder',
-            'creator' => 'dc:Creator',
-            'rightsjurisdiction' => 'Rights Jurisdiction',
-            //'rightscontact' => 'Rights Contact',
-            'rightscontact' => 'dc:Rights',
-            //'accessrestrict' => 'AccessRestrict',
-            'publisher' => 'dc:Publisher',
-            'contributor' => 'dc:Contributor',
-            'subjectname' => 'dc:Subject',
-            'rightsnote' => 'dc:Rights',
-            'provenance' => 'Provenance',
-            'rightsenddate' => 'Rights End Date',
-            'description' => 'dc:Description',
-            'place' => 'Place',
-            'physdesc'=>'dc:format'
-        )
-    );
+        );
+        $this->_propertyMaps['ucldc_schema'] = array(
+            'rightsstatus' => $use_UCLDC ? 'Copyright Status' : 'dc:Rights',
+            'campusunit' => $use_UCLDC ? 'Campus' : 'dc:Publisher',
+            'localidentifier' => $use_UCLDC ? 'Local Identifier' : 'dc:Identifier',
+            'rightsnotice' => $use_UCLDC ? 'Copyright Notice' : 'dc:Rights',
+            'language' => $use_UCLDC ? 'Language' : 'dc:Language',
+            'relatedresource' => $use_UCLDC ? 'Related Resource' : 'dc:Relation',
+            'source' => $use_UCLDC ? 'Source' : 'dc:Source',
+            'alternativetitle' => $use_UCLDC ? 'Alternative Title' : 'dc:Title',
+            'collection' => $use_UCLDC ? 'Collection' : 'dc:Relation',
+            'formgenre' => $use_UCLDC ? 'Form / Genre' : 'dc:Type',
+            'identifier' => $use_UCLDC ? 'Identifier' : 'dc:Identifier',
+            'rightsstatement' => $use_UCLDC ? 'Copyright Statement' : 'dc:Rights',
+            'type' => $use_UCLDC ? 'Type' : 'dc:Type',
+            'physlocation' => $use_UCLDC ? 'Physical Location' : 'dc:Coverage',
+            'temporalcoverage' => $use_UCLDC ? 'Temporal Coverage' : 'dc:Coverage',
+            'date' => $use_UCLDC ? 'Date' : 'dc:Date',
+            'subjecttopic' => $use_UCLDC ? 'Subject (Topic)' : 'dc:Subject',
+            'rightsholder' => $use_UCLDC ? 'Copyright Holder' : 'dc:Rights',
+            'creator' => $use_UCLDC ? 'Creator' : 'dc:Creator',
+            'rightsjurisdiction' => $use_UCLDC ? 'Copyright Jurisdiction' : 'dc:Rights',
+            'rightscontact' => $use_UCLDC ? 'Copyright Contact' : 'dc:Rights',
+            'publisher' => $use_UCLDC ? 'Publisher' : 'dc:Publisher',
+            'contributor' => $use_UCLDC ? 'Contributor' : 'dc:Contributor',
+            'subjectname' => $use_UCLDC ? 'Subject (Name)' : 'dc:Subject',
+            'rightsnote' => $use_UCLDC ? 'Copyright Note' : 'dc:Rights',
+            'provenance' => $use_UCLDC ? 'Provenance' : 'dc:Source',
+            'description' => $use_UCLDC ? 'Description' : 'dc:Description',
+            'place' => $use_UCLDC ? 'Place' : 'dc:Coverage',
+            'physdesc'=> $use_UCLDC ? 'Physical Description' : 'dc:format',
+            //'rightsdeterminationdate' => $use_UCLDC ? 'Rights Determination Date' : '', //***
+            //'rightsenddate' => $use_UCLDC ? 'Rights End Date' : '',//**,
+            //'rightsstartdate' => $use_UCLDC ? 'Rights Start Date' : '', //***
+//            'accessrestrict' => $use_UCLDC ? 'AccessRestrict' : '',
+        );
+    }
 
     function fullTextSearch($parentUid,$searchTerm) {
         $url = $this->getUrlLoggedIn();
