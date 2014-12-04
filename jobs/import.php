@@ -44,11 +44,14 @@ class NuxeoLink_ImportJob extends Omeka_Job_AbstractJob
         $client = new NuxeoOmekaImportClient(get_option('nuxeoUrl'));
         $session = $client->getSession(get_option('nuxeoUser'),get_option('nuxeoPass'));
 
-
         foreach(unserialize($this->_docPaths) as $path) {
-            $session->addDoc($path,$this->_collection,$this->_public);
-            
+            $session->addDoc($path,$this->_collection,$this->_public);            
         }
+
+        //email user to let them know it is
+        $subject = "Nuxeo -> Omeka: Import Completed";
+        $message = "Your import from Nuxeo into Omeka has completed successfully. Your new items are ready to view in your Omeka dashboard. Have a nice day!";
+        mail($this->email,$subject,$message);
     
     }
 

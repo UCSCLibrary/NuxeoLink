@@ -84,7 +84,7 @@ class Nuxeo_Form_Import extends Omeka_Form
         try {
 
             if(self::_import())
-                return('Your Nuxeo documents are now being imported. This process may take a few minutes. You may continue to work while the photos are imported in the background. You may notice some strange behavior while the photos are uploading, but it will all be over soon.');
+                return('Your Nuxeo documents are now being imported. You will recieve an email when your import is complete. This process may take a few minutes. You may continue to work while the photos are imported in the background. You may notice some strange behavior while the photos are uploading, but it will all be over soon.');
 
         } catch(Exception $e) 
                 {
@@ -115,11 +115,17 @@ class Nuxeo_Form_Import extends Omeka_Form
         else 
             $docPaths = array();
 
+        $user = current_user();
+        if(!$user)
+            throw new Exception('Could not retrieve logged in user');
+        $email = $user->email;
+
         //set up options to pass to background job
         $options = array(
             'collection'=>$collection,
             'public'=>$public,
-            'paths'=>serialize($docPaths)
+            'paths'=>serialize($docPaths),
+            'email'=>$email
         );
 
         //print_r($options);
