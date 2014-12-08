@@ -95,7 +95,6 @@ class NuxeoOmekaSession extends NuxeoSession {
         if(strpos($url,"/automation"))
             $url = str_replace("/automation","",$url);
         $searchUrl = $url."/id/".$parentUid."/@search?fullText=".urlencode($searchTerm)."&orderBy=dc:title";
-
         //$data = json_decode($this->curl_download($searchUrl));
         $data = json_decode($this->stream_download($searchUrl));
         if(empty($data))
@@ -138,9 +137,13 @@ class NuxeoOmekaSession extends NuxeoSession {
         return $this->_getDocs($query,$uid);
     }
 
-    function getChildDocuments($uid) {
-        $query="SELECT * FROM Document WHERE ecm:parentId = '".$uid."' AND ecm:mixinType = 'Asset' ";
-        return $this->_getDocs($query,$uid);
+    //function getChildDocuments($uid) {
+    function getChildDocuments($path) {
+        //$query="SELECT * FROM Document WHERE ecm:parentId = '".$uid."' AND ecm:mixinType = 'Asset' ";
+        //$query="SELECT * FROM Document WHERE ecm:ancestorId <> '".$uid."' AND ecm:mixinType = 'Asset' ";
+        $query="SELECT * FROM Document WHERE ecm:path startswith '$path' AND ecm:mixinType = 'Asset' ";
+        //return $this->_getDocs($query,$uid);
+        return $this->_getDocs($query,$path);
     }
 
     public static function GetElementSlug($elementName) {
@@ -314,12 +317,10 @@ class NuxeoOmekaSession extends NuxeoSession {
     }
 
     private function _getDocs($query,$parent='#') {
-
         $answer = $this->newRequest("Document.Query")->set('params', 'query', $query )->setSchema('picture')->sendRequest();
         //$answer = $this->newRequest("Document.Query")->set('params', 'query', $query )->setSchema('ucldc_schema')->sendRequest();
         $docs = array();
         $list = $answer->getDocumentList();
-
         if(count($list)==0)
             die();
         foreach($list as $doc) {
@@ -328,6 +329,7 @@ class NuxeoOmekaSession extends NuxeoSession {
                 'id'=> $doc->getUid(),
                 'children'=>true,
                 'path'=> $doc->getPath(),
+                'li_attr' => array('title'=>$doc->getPath()),
                 'type'=>$doc->getType()
             );
             if(in_array('Thumbnail',$doc->getFacets())) {

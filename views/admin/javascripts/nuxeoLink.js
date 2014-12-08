@@ -2,7 +2,7 @@ jQuery(document).ready(addDamsBrowser);
 jQuery(document).ready(implementSearch);
 jQuery(document).ready(warnDeleteSchema);
 var url = 'nuxeo-link/index/folders/uid/';
-var docUrl = 'nuxeo-link/index/documents/uid/';
+var docUrl = 'nuxeo-link/index/documents?path=';
 var searchUrl = 'nuxeo-link/index/search/uid/';
 
 function implementSearch() {
@@ -82,6 +82,7 @@ function warnDeleteSchema() {
     });
 }
 
+
 function addDamsBrowser() {
 
     jQuery('.nuxeo-link #fieldset-fields').append(jQuery("#nuxeo-search-div"));
@@ -103,13 +104,13 @@ function addDamsBrowser() {
 	    }
 	}
     });
-
     jQuery('#tree').on('select_node.jstree',function(event,selectParams){
 	id = selectParams['selected'];
-	//console.log(id);
+	path = jQuery('#'+id).attr('title');
 	jQuery('#nuxeo-preview').html('<h3>Loading...</h3><p>Retrieving data from Nuxeo. For large datasets, this could take a minute. Thanks for your patience.</p>');
 	jQuery.get(
-	    docUrl+id,
+	    //docUrl+id,
+	    docUrl+encodeURIComponent(path),
 	    function(jsonData) {
 		if(jsonData=="file not found")
 		    data={};
@@ -120,6 +121,7 @@ function addDamsBrowser() {
 		    jQuery('#nuxeo-preview').html('<div id="select-buttons"><button id="select-all" class="select-button">Select All</button><button id="select-none" class="select-button">Select None</button></div><label id="numDocLi">'+data.length+' Documents <div style="font-size:0.8em">(displaying images only)</div></label><br><ul id="preview-list"></ul>');
 		else 
 		    jQuery('#nuxeo-preview').html('<h3>No documents found</h3><p>There are no documents directly inside the folder you have selected on the left. There may be documents inside subfolders.</p>');
+
 
 		jQuery.each(data,function(index,value) {
 		    if(!('thumb' in value))
@@ -148,5 +150,9 @@ function bindButtonActions() {
 	e.preventDefault();
 	jQuery('.import-check').attr('checked',false);
     });
+
+}
+
+function getPath(id) {
 
 }

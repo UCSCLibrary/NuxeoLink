@@ -224,12 +224,15 @@ class NuxeoRequest {
             }
 
             $ctx = stream_context_create($params);
+            
             $fp = @fopen($this->url, 'rb', false, $ctx);
             $answer = @stream_get_contents($fp);
 
-            if (!isset($answer) OR $answer == false)
-                echo 'Error Server';
-            else {
+            if (!isset($answer) OR $answer == false) {
+                //echo $this->url; //'Error Server';
+                //print_r($params);
+                $documents = array();
+            } else {
                 if (null == json_decode($answer, true)) {
                     $documents = $answer;
                     file_put_contents("tempstream", $answer);

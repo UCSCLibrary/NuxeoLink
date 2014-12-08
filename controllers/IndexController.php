@@ -77,14 +77,16 @@ class NuxeoLink_IndexController extends Omeka_Controller_AbstractActionControlle
 
   public function documentsAction()
   {
-
       //require the helpers
       require_once(dirname(dirname(__FILE__)).'/helpers/APIfunctions.php');
 
-      $uid = $this->getParam('uid');
+      //$uid = $this->getParam('uid');
+      $path = $this->getParam('path');
+//      echo 'Path: '.$path;
       $client = new NuxeoOmekaImportClient(get_option('nuxeoUrl'));
       $session = $client->getSession(get_option('nuxeoUser'),get_option('nuxeoPass'));
-      $docs = $session->getChildDocuments($uid);
+      //$docs = $session->getChildDocuments($uid);
+      $docs = $session->getChildDocuments($path);
       $this->view->documents = $docs;
 
   }
