@@ -143,6 +143,10 @@ class NuxeoOmekaSession extends NuxeoSession {
         return $this->_getDocs($query,$uid);
     }
 
+    public static function GetElementSlug($elementName) {
+        return array_search($elementName,$this->_propertyMaps);
+    }
+
     public function getFullDoc($docPath) {
 
         $answer = $this->newRequest("Document.Fetch")->set('params', 'value', $docPath )->setSchema()->sendRequest();
