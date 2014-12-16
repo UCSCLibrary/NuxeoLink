@@ -158,9 +158,6 @@ class NuxeoLinkPlugin extends Omeka_plugin_AbstractPlugin
             set_option('nuxeoKnownSchema',serialize($knownSchema));
                 
         } 
-
-    
-//TODO Import or delete UCLDC schema as necessary
     }
     
     /**

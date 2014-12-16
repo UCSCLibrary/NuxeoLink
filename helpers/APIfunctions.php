@@ -26,7 +26,7 @@ class NuxeoOmekaImportClient extends NuxeoPhpAutomationClient {
 
     public function getSession($username = 'Administrator', $password = 'Administrator') {
         $this->session = $username . ":" . $password;
-$session = new NuxeoOmekaSession($this->url, $this->session);
+        $session = new NuxeoOmekaSession($this->url, $this->session);
         return $session;
     }
 }
@@ -171,6 +171,7 @@ class NuxeoOmekaSession extends NuxeoSession {
         $answer = $this->newRequest("Document.Fetch")->set('params', 'value', $docPath )->setSchema()->sendRequest();
 
         foreach($answer->getDocumentList() as $doc) {
+
             $postElements = $this->_getPostElements($doc);
             $post = array(
 			 'Elements'=>$postElements,
@@ -232,18 +233,16 @@ class NuxeoOmekaSession extends NuxeoSession {
             $schema=$propkeys[0];
             $property=$propkeys[1];
             
-            if($property == 'type' && $propval != 'image')
-                continue;
+            //if($property == 'type' && $propval != 'image')
+            //    continue;
           
             if($property == 'accessrestrict' && $propval!='public')
                 continue;
             
             $beforeSchema = $schema;
-            //echo '   --   beforeschema: '.$schema;
+            //echo '   --   beforefilter: '.$schema.".".$property;
             $property = $this->_filterProperty($schema,$property);
-            
-            if($schema !== $beforeSchema)
-                echo '  afterschema: '.$schema;
+            //echo '   --   afterfilter: '.$schema.".".$property;
             
             if(!isset($knownSchema[$schema]))
                 continue;
@@ -253,27 +252,42 @@ class NuxeoOmekaSession extends NuxeoSession {
             if(is_array($propval)) {
                 
                 $propval = array_filter($propval);
-                if(empty($propval))
+                if(empty($propval)) {
+                    //echo " no value ";
                     continue;
-            }elseif(!is_null($propval)) {
-                $propval = array($propval);
+                }
+            } elseif(!is_null($propval)) { 
+                    $propval = array($propval);
             }else{ //null
+                //echo " null ";
                 continue;
             }
-
             foreach($propval as $val) {
                 if(is_array($val)) {
-                    if(array_key_exists('date',$val))
+                    if(array_key_exists('date',$val)){
                         $val=$val['date'];
+                        continue;
+                    }
+
+                    if(array_key_exists('language',$val)){
+                        $val=$val['language'];
+                        continue;
+                    }
                     
-                    else if(array_key_exists('name',$val))
+                    else if(array_key_exists('name',$val)){
                         $val=$val['name'];
+                        continue;
+                    }
                     
-                    else if(array_key_exists('heading',$val))
+                    else if(array_key_exists('heading',$val)){
                         $val=$val['heading'];
+                        continue;
+                    }
                     
-                    else if(array_key_exists('item',$val))
+                    else if(array_key_exists('item',$val)){
                         $val=$val['item'];
+                        continue;
+                    }
                 }
 
                 $html = false;
@@ -282,12 +296,12 @@ class NuxeoOmekaSession extends NuxeoSession {
 
                 $postArray = array('text'=>$val,'html'=>$html);
                 if(!is_null($element->id)) {
-                    if(!in_array($postArray,$properties[$element->id]))
+                    if(!isset($properties[$element->id]) || !in_array($postArray,$properties[$element->id]))
                         $properties[$element->id][]=$postArray;
                 }
 
                 if($dcElement = $elementTable->findByElementSetNameAndElementName($knownSchema[$schema],ucfirst($property))) {
-                    if(!in_array($postArray,$properties[$dcElement->id]))
+                    if(!isset($properties[$dcElement->id]) || !in_array($postArray,$properties[$dcElement->id]))
                         $properties[$dcElement->id][]=$postArray;
                 }
 
@@ -306,7 +320,7 @@ class NuxeoOmekaSession extends NuxeoSession {
             if(!strpos($prop = $maps[$schema][$property],':')) {
                 return $prop;
             } else {
-                echo ' !- schema:'.$schema.' Property: '.$property.' -!';
+                //echo ' !- schema:'.$schema.' Property: '.$property.' -!';
                 $ps = explode(':',$prop);
                 $schema = $ps[0];
                 return $ps[1];

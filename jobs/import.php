@@ -19,6 +19,8 @@ class NuxeoLink_ImportJob extends Omeka_Job_AbstractJob
     private $_collection;
 
     private $_public;
+    
+    private $_email;
 
     public function setCollection($collection) {
         $this->_collection = $collection;
@@ -30,6 +32,10 @@ class NuxeoLink_ImportJob extends Omeka_Job_AbstractJob
 
     public function setPaths($paths) {
         $this->_docPaths = $paths;
+    }
+
+    public function setEmail($email) {
+        $this->_email = $email;
     }
 
     public function perform()
@@ -48,10 +54,10 @@ class NuxeoLink_ImportJob extends Omeka_Job_AbstractJob
             $session->addDoc($path,$this->_collection,$this->_public);            
         }
 
-        //email user to let them know it is
+        //email user to let them know it is finished
         $subject = "Nuxeo -> Omeka: Import Completed";
         $message = "Your import from Nuxeo into Omeka has completed successfully. Your new items are ready to view in your Omeka dashboard. Have a nice day!";
-        mail($this->email,$subject,$message);
+        mail($this->_email,$subject,$message);
     
     }
 

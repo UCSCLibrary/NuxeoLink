@@ -46,7 +46,7 @@
 ?></p>
     </div>
 </div>
-<!--
+<?php /* ?>
 <div class="field">
     <div id="nuxeo-autocreate-schema-label" class="two columns alpha">
         <label for="nuxeo-autocreate-schema"><?php echo __('Autocreate new schema?'); ?></label>
@@ -56,8 +56,8 @@
         array('disabled'=>'disabled')); ?>
         <p class="explanation"><?php echo __(
             'Would you like to automatically create new schema in Omeka' 
-          . 'to match any unknown schema in nuxeo containing item level metadata?'
+          . ' to match any unknown schema in nuxeo containing item level metadata?'
         ); ?></p>
     </div>
 </div>
--->
+<?php */ ?>
