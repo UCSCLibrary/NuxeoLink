@@ -83,6 +83,14 @@ class NuxeoLinkPlugin extends Omeka_plugin_AbstractPlugin
             set_option('nuxeoUser',$_REQUEST['nuxeoUser']);
         if(!empty($_REQUEST['nuxeoPass']))
             set_option('nuxeoPass',$_REQUEST['nuxeoPass']);
+        
+        if($_REQUEST['nuxeoUcldcSchema']=='installed' && get_option('nuxeoUcldcSchema')!=='installed') 
+            $this->_installUcldcSchema();
+        else if($_REQUEST['nuxeoUcldcSchema'] !=="installed" && get_option('nuxeoUcldcSchema')=='installed' ) 
+            $this->_uninstallUcldcSchema();
+    }
+
+    private function _installUcldcSchema() {
 
         $ucldcElementNames = array( 
             'Copyright Status',
@@ -119,32 +127,31 @@ class NuxeoLinkPlugin extends Omeka_plugin_AbstractPlugin
             'Rights Determination Date',//***  
             'Rights Start Date', //***  
         );
-        
-        if($_REQUEST['nuxeoUcldcSchema']=='installed' && get_option('nuxeoUcldcSchema')!=='installed') {
-            //install schema
-            $ucldcElementSet = new ElementSet();
-            $ucldcElementSet->name="UCLDC Schema";
-            $ucldcElementSet->save();
+
+        //install schema
+        $ucldcElementSet = new ElementSet();
+        $ucldcElementSet->name="UCLDC Schema";
+        $ucldcElementSet->save();
             
-            $ucldcElements = array();
-            foreach($ucldcElementNames as $elementName) {
-                $element = new Element();
-                $element->element_set_id = $ucldcElementSet->id;
-                $element->name = $elementName;
-                $element->save();
-                $ucldcElements[] = $element;
-            }
-            $ucldcElementSet->addElements($ucldcElements);
-            $ucldcElementSet->save();
+        $ucldcElements = array();
+        foreach($ucldcElementNames as $elementName) {
+            $element = new Element();
+            $element->element_set_id = $ucldcElementSet->id;
+            $element->name = $elementName;
+            $element->save();
+            $ucldcElements[] = $element;
+        }
+        $ucldcElementSet->addElements($ucldcElements);
+        $ucldcElementSet->save();
 
-            set_option('nuxeoUcldcSchema','installed');
+        set_option('nuxeoUcldcSchema','installed');
 
-            $knownSchema = unserialize(get_option('nuxeoKnownSchema'));
-            $knownSchema['ucldc_schema']="UCLDC Schema";
-            set_option('nuxeoKnownSchema',serialize($knownSchema));
+        $knownSchema = unserialize(get_option('nuxeoKnownSchema'));
+        $knownSchema['ucldc_schema']="UCLDC Schema";
+        set_option('nuxeoKnownSchema',serialize($knownSchema));
+    }
 
-        } else if($_REQUEST['nuxeoUcldcSchema'] !=="installed" && get_option('nuxeoUcldcSchema')=='installed' ) {
-            
+    private function _uninstallUcldcSchema() {
             $ucldcElementSet = get_db()->getTable('ElementSet')->findByName('UCLDC Schema');
             foreach($ucldcElementSet->getElements() as $element) 
                 $element->delete();
@@ -156,8 +163,6 @@ class NuxeoLinkPlugin extends Omeka_plugin_AbstractPlugin
             $knownSchema = unserialize(get_option('nuxeoKnownSchema'));
             unset($knownSchema['ucldc_schema']);
             set_option('nuxeoKnownSchema',serialize($knownSchema));
-                
-        } 
     }
     
     /**

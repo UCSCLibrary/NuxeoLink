@@ -70,7 +70,7 @@ class NuxeoSession {
         } elseif (strpos($url, 'http') !== false) {
             $this->urlLoggedIn = "http://" . $session . "@" . $this->urlLoggedIn;
         } else {
-            throw Exception;
+            throw new Exception();
         }
         //die($this->urlLoggedIn);
         $this->headers = $headers;

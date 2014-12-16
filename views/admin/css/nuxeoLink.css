@@ -1,5 +1,7 @@
 
-
+#preview-list > li {
+    width:100%;
+}
 
 #nuxeo-preview > #numDocLi {
     font-size:1em;

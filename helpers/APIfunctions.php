@@ -295,6 +295,7 @@ class NuxeoOmekaSession extends NuxeoSession {
                     $html = true;
 
                 $postArray = array('text'=>$val,'html'=>$html);
+                
                 if(!is_null($element->id)) {
                     if(!isset($properties[$element->id]) || !in_array($postArray,$properties[$element->id]))
                         $properties[$element->id][]=$postArray;
