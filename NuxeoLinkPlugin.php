@@ -92,7 +92,8 @@ class NuxeoLinkPlugin extends Omeka_plugin_AbstractPlugin
 
     private function _installUcldcSchema() {
 
-        $ucldcElementNames = array( 
+        $ucldcElementNames = array(
+            'Title',
             'Copyright Status',
             'Campus',
             'Local Identifier',

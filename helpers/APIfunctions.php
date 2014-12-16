@@ -227,14 +227,14 @@ class NuxeoOmekaSession extends NuxeoSession {
         $properties = array();
         $props = $doc->getProperties();
 
+        if(isset($props['dc:title'] && get_option('nuxeoUcldcSchema') == 'installed'))
+            $props['ucldc_schema:title'] = $props['dc:title'];
+
         foreach($props as $propkey=>$propval) {
             
             $propkeys = explode(':',$propkey);
             $schema=$propkeys[0];
             $property=$propkeys[1];
-            
-            //if($property == 'type' && $propval != 'image')
-            //    continue;
           
             if($property == 'accessrestrict' && $propval!='public')
                 continue;
