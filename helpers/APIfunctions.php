@@ -226,8 +226,8 @@ class NuxeoOmekaSession extends NuxeoSession {
         $elementTable = get_db()->getTable('Element');   
         $properties = array();
         $props = $doc->getProperties();
-
-        if(isset($props['dc:title'] && get_option('nuxeoUcldcSchema') == 'installed'))
+        $title = $props['dc:title'];
+        if(isset($title) && get_option('nuxeoUcldcSchema') == 'installed')
             $props['ucldc_schema:title'] = $props['dc:title'];
 
         foreach($props as $propkey=>$propval) {
