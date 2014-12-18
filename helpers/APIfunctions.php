@@ -173,6 +173,13 @@ class NuxeoOmekaSession extends NuxeoSession {
         foreach($answer->getDocumentList() as $doc) {
 
             $postElements = $this->_getPostElements($doc);
+            
+//            echo("<pre>");
+//            print_r($doc->getProperties());
+//            echo("POST ELEMENTS");
+            print_r($postElements);
+//            echo("</pre>");
+
             $post = array(
 			 'Elements'=>$postElements,
 			 'item_type_id'=>'6',      //a still image TODO
@@ -249,8 +256,10 @@ class NuxeoOmekaSession extends NuxeoSession {
 
             $element = $elementTable->findByElementSetNameAndElementName($knownSchema[$schema],ucfirst($property));
 
+            // if($property == "date")
+            //    print_r($propval);
+
             if(is_array($propval)) {
-                
                 $propval = array_filter($propval);
                 if(empty($propval)) {
                     //echo " no value ";
@@ -262,31 +271,20 @@ class NuxeoOmekaSession extends NuxeoSession {
                 //echo " null ";
                 continue;
             }
+
             foreach($propval as $val) {
                 if(is_array($val)) {
                     if(array_key_exists('date',$val)){
                         $val=$val['date'];
-                        continue;
-                    }
-
-                    if(array_key_exists('language',$val)){
+                        echo('date: '.$val.'prop:'.$property.'element_id: '.$element->id);
+                    } else if(array_key_exists('language',$val)){
                         $val=$val['language'];
-                        continue;
-                    }
-                    
-                    else if(array_key_exists('name',$val)){
+                    }else if(array_key_exists('name',$val)){
                         $val=$val['name'];
-                        continue;
-                    }
-                    
-                    else if(array_key_exists('heading',$val)){
+                    }else if(array_key_exists('heading',$val)){
                         $val=$val['heading'];
-                        continue;
-                    }
-                    
-                    else if(array_key_exists('item',$val)){
+                    }else if(array_key_exists('item',$val)){
                         $val=$val['item'];
-                        continue;
                     }
                 }
 
@@ -335,6 +333,8 @@ class NuxeoOmekaSession extends NuxeoSession {
         $answer = $this->newRequest("Document.Query")->set('params', 'query', $query )->setSchema('picture')->sendRequest();
         //$answer = $this->newRequest("Document.Query")->set('params', 'query', $query )->setSchema('ucldc_schema')->sendRequest();
         $docs = array();
+        if(!is_object($answer))
+            return($docs);
         $list = $answer->getDocumentList();
         if(count($list)==0)
             die();
