@@ -125,7 +125,7 @@ function addDamsBrowser() {
 
 		jQuery.each(data,function(index,value) {
 		    if(!('thumb' in value))
-			next;
+			return true;
 		    prevLi = '<li id="preview-'+value['id']+'">';
 		    prevLi += '<input type="checkbox" class="import-check" checked="checked" name="toImport[]" value="'+value['path']+'" />';
 		    prevLi += '<img src="'+value['thumb']+'" />';
