@@ -128,9 +128,6 @@ class Nuxeo_Form_Import extends Omeka_Form
             'email'=>$email
         );
 
-        //print_r($options);
-        //die();
-
         //attempt to start the job
         try{
             $dispacher = Zend_Registry::get('job_dispatcher');

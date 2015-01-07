@@ -16,7 +16,7 @@ class NuxeoLink_IndexController extends Omeka_Controller_AbstractActionControlle
 {    
 
   /**
-   * The default action to display the import from and process it.
+   * The default action to display the import form and process it.
    *
    * This action runs before loading the main import form. It 
    * processes the form output if there is any, and populates

@@ -22,7 +22,16 @@ class NuxeoLinkPlugin extends Omeka_plugin_AbstractPlugin
     /**
      * @var array Hooks for the plugin.
      */
-    protected $_hooks = array('install','uninstall','initialize','config','config_form','admin_head','define_acl');
+    protected $_hooks = array(
+        'install',
+        'uninstall',
+        'initialize',
+        'config',
+        'config_form',
+        'admin_head',
+        'define_acl',
+        'upgrade'
+    );
 
     /**
      * @var array Filters for the plugin.
@@ -59,6 +68,11 @@ class NuxeoLinkPlugin extends Omeka_plugin_AbstractPlugin
     public function hookUninstall()
     {
         $this->_uninstallOptions();
+    }
+
+    public function hookUpgrade()
+    {
+        set_option('nuxeoKnownSchema',serialize(array('dc'=>'Dublin Core','ucldc_schema'=>'UCLDC Schema')));
     }
 
     /**
@@ -129,9 +143,13 @@ class NuxeoLinkPlugin extends Omeka_plugin_AbstractPlugin
             'Rights Start Date', //***  
         );
 
+        $schemaName = "UCLDC Schema";
+        if($ucldcElementSet = get_db()->getTable('ElementSet')->findByName($schemaName))
+            $ucldcElementSet->delete();
+
         //install schema
         $ucldcElementSet = new ElementSet();
-        $ucldcElementSet->name="UCLDC Schema";
+        $ucldcElementSet->name=$schemaName;
         $ucldcElementSet->save();
             
         $ucldcElements = array();

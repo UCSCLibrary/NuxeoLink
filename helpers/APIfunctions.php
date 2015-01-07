@@ -39,6 +39,11 @@ class NuxeoOmekaImportClient extends NuxeoPhpAutomationClient {
 class NuxeoOmekaSession extends NuxeoSession {
 
     public function __construct($url, $session, $headers = "Content-Type: application/json+nxrequest") {
+        if($url=='dummy' && $session == 'dummy'){
+             $this->_setPropertyMaps( get_option('nuxeoUcldcSchema') == 'installed');
+             return;
+        }
+
         parent::__construct($url, $session, $headers = "Content-Type: application/json+nxrequest");
         $this->_setPropertyMaps( get_option('nuxeoUcldcSchema') == 'installed');
     }
@@ -130,8 +135,6 @@ class NuxeoOmekaSession extends NuxeoSession {
         return $output;
     }
 
-
-
     function getChildFolders($uid) {
         $query="SELECT * FROM Folder WHERE ecm:parentId = '".$uid."' AND dc:title like '%'";
         return $this->_getDocs($query,$uid);
@@ -147,7 +150,8 @@ class NuxeoOmekaSession extends NuxeoSession {
     }
 
     public static function GetElementSlug($elementName) {
-        return array_search($elementName,$this->_propertyMaps);
+        $nos = new NuxeoOmekaSession('dummy','dummy');
+        return array_search($elementName,$nos->_propertyMaps);
     }
 
     public function getFullDoc($docPath) {
@@ -255,6 +259,9 @@ class NuxeoOmekaSession extends NuxeoSession {
                 continue;
 
             $element = $elementTable->findByElementSetNameAndElementName($knownSchema[$schema],ucfirst($property));
+
+            if(!is_object($element))
+                continue;
 
             // if($property == "date")
             //    print_r($propval);
