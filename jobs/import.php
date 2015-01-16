@@ -40,8 +40,6 @@ class NuxeoLink_ImportJob extends Omeka_Job_AbstractJob
 
     public function perform()
     {
-        include_once('/var/www/html/ezid_test2.php');
-        /*
         Zend_Registry::get('bootstrap')->bootstrap('Acl');
       
         //require the helpers
@@ -60,7 +58,6 @@ class NuxeoLink_ImportJob extends Omeka_Job_AbstractJob
         $subject = "Nuxeo -> Omeka: Import Completed";
         $message = "Your import from Nuxeo into Omeka has completed successfully. Your new items are ready to view in your Omeka dashboard. Have a nice day!";
         mail($this->_email,$subject,$message);
-        */
     }
 
 }
