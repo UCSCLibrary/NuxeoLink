@@ -1,15 +1,15 @@
 
-#preview-list > li {
+.nuxeo-link #preview-list > li {
     width:100%;
 }
 
-#nuxeo-preview > #numDocLi {
+.nuxeo-link #nuxeo-preview > #numDocLi {
     font-size:1em;
     max-width:125px;
 }
 
 
-#nuxeo-preview > label {
+.nuxeo-link #nuxeo-preview > label {
     float: right;
     font-size: 1.1em;
     position: relative;
@@ -17,7 +17,7 @@
     top: -25px;
 }
 
-#nuxeo-search-blurb {
+.nuxeo-link #nuxeo-search-blurb {
 position:absolute;
   top: 10px;
   bottom: 0;
@@ -33,35 +33,35 @@ position:absolute;
   border-radius:10px;
 }
 
-#nuxeo-search-div:hover > #nuxeo-search-blurb {
+.nuxeo-link #nuxeo-search-div:hover > #nuxeo-search-blurb {
     visibility: visible;
 }
 
-#nuxeo-search-div  {
+.nuxeo-link #nuxeo-search-div  {
     position:relative;
     margin-top: 20px;
     width:325px;
 }
 
-#tree {
+.nuxeo-link #tree {
     max-height: 500px;
     overflow-y: auto;
     float:left;
     clear:left;
     width:35%;
 }
-#nuxeo-preview {
+.nuxeo-link #nuxeo-preview {
     max-height: 500px;
     overflow-y: auto;
     float:left;
     width:65%
 }
-#preview-list li {
+.nuxeo-link #preview-list li {
     line-height:75px;
     overflow:hidden;
     border-top: 1px solid #000000;
 }
-#preview-list li p {
+.nuxeo-link #preview-list li p {
     float: right;
     font-size: 1.1em;
     margin-bottom: 0;
@@ -72,28 +72,28 @@ position:absolute;
     padding-top: 5px;
     text-align: right;
 }
-#preview-list li input{
+.nuxeo-link #preview-list li input{
     margin-right: 5px;
 }
-#preview-list li img {
+.nuxeo-link #preview-list li img {
     height:62px;
     width:62px;
     vertical-align:middle;
     max-width:100px;
 }
 
-#preview-list {
+.nuxeo-link #preview-list {
     list-style-type:none;
 }
 
-#select-buttons {
+.nuxeo-link #select-buttons {
     margin-left:30%;
 }
-#select-buttons button {
+.nuxeo-link #select-buttons button {
     margin-bottom:0;
 }
 
-#fieldset-submit_buttons input {
+.nuxeo-link #fieldset-submit_buttons input {
     margin-left: 40%;
     margin-right: auto;
     margin-top: 15px;
