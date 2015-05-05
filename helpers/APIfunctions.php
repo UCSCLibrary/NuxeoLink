@@ -96,6 +96,7 @@ class NuxeoOmekaSession extends NuxeoSession {
     }
 
     function fullTextSearch($parentUid,$searchTerm) {
+        //TODO
         $url = $this->getUrlLoggedIn();
         if(strpos($url,"/automation"))
             $url = str_replace("/automation","",$url);
@@ -144,7 +145,8 @@ class NuxeoOmekaSession extends NuxeoSession {
     function getChildDocuments($path) {
         //$query="SELECT * FROM Document WHERE ecm:parentId = '".$uid."' AND ecm:mixinType = 'Asset' ";
         //$query="SELECT * FROM Document WHERE ecm:ancestorId <> '".$uid."' AND ecm:mixinType = 'Asset' ";
-        $query="SELECT * FROM Document WHERE ecm:path startswith '$path' AND ecm:mixinType = 'Asset' ";
+        //$query="SELECT * FROM Document WHERE ecm:path startswith '$path' AND ecm:mixinType = 'Asset' ";
+        $query="SELECT * FROM Document WHERE ecm:path startswith '$path' ";
         //return $this->_getDocs($query,$uid);
         return $this->_getDocs($query,$path);
     }
@@ -212,6 +214,7 @@ class NuxeoOmekaSession extends NuxeoSession {
     }
 
     public function addFile($filePath,$filename,$item) {
+        //TODO
         $urlblob = $this->getUrlLoggedIn().'/'.$filePath ;
 
         $remoteFile = fopen($urlblob, 'r');
@@ -336,6 +339,14 @@ class NuxeoOmekaSession extends NuxeoSession {
 
     }
 
+    private function _getAuthUrl($url) {
+        $loggedUrl = $this->getUrlLoggedIn();
+        $urls = explode('@',$loggedUrl);
+        $url = str_replace('http://','https://',$url);
+        $url = str_replace('https://',$urls[0].'@',$url);
+        return $url;
+    }
+
     private function _getDocs($query,$parent='#') {
         $answer = $this->newRequest("Document.Query")->set('params', 'query', $query )->setSchema('picture')->sendRequest();
         //$answer = $this->newRequest("Document.Query")->set('params', 'query', $query )->setSchema('ucldc_schema')->sendRequest();
@@ -343,9 +354,15 @@ class NuxeoOmekaSession extends NuxeoSession {
         if(!is_object($answer))
             return($docs);
         $list = $answer->getDocumentList();
+
         if(count($list)==0)
             die();
+
         foreach($list as $doc) {
+/*            echo '<pre>';
+            print_r($doc);
+            echo('</pre><br><br><br>');
+*/
             $newDoc = array(
                 'text'=> $doc->getTitle(),
                 'id'=> $doc->getUid(),
@@ -356,8 +373,13 @@ class NuxeoOmekaSession extends NuxeoSession {
             );
             if(in_array('Thumbnail',$doc->getFacets())) {
                 $thumbpath =  $doc->getThumbPath();
-                if(!is_array($thumbpath))
-                    $newDoc['thumb'] = htmlspecialchars($this->getUrlLoggedIn().'/'.$thumbpath);
+
+                if(!is_array($thumbpath)){
+                    $newDoc['thumb'] = htmlspecialchars($this->_getAuthUrl($thumbpath));
+                    //$newDoc['thumb'] = htmlspecialchars($this->getUrlLoggedIn().'/'.$thumbpath);
+//                    echo $newDoc['thumb'];
+//                    die();
+                }
             }
             $docs[] = $newDoc;
         }
