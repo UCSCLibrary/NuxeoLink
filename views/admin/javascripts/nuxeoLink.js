@@ -28,7 +28,7 @@ function implementSearch() {
 		entries = data.entries;
 		//console.log(data);
 		if(entries.length > 0) {
-		    jQuery('#nuxeo-preview').html('<div id="select-buttons"><button id="select-all" class="select-button">Select All</button><button id="select-none" class="select-button">Select None</button></div><label id="numDocLi">'+entries.length+' Documents <div style="font-size:0.8em">(displaying images only)</div></label><br><ul id="preview-list"></ul>');
+		    jQuery('#nuxeo-preview').html('<div id="select-buttons"><button id="select-all" class="select-button">Select All</button><button id="select-none" class="select-button">Select None</button></div><label id="numDocLi">'+entries.length+' Documents <div style="font-size:0.8em">(not displaying audio/video)</div></label><br><ul id="preview-list"></ul>');
 		}else {
 		    jQuery('#nuxeo-preview').html('<h3>No Results</h3><p>Your search returned no results.</p>');
 		    return;
@@ -39,8 +39,8 @@ function implementSearch() {
 //		    console.log('thumburl: '+thumbUrl);
 		    if((jQuery.inArray("Picture",value.facets)) < 0)
 		    {
-			console.log(value.facets);
-			console.log('skipping non image file');
+//			console.log(value.facets);
+//			console.log('skipping non image file');
 			return true;
 		    }
 		    prevLi = '<li id="preview-'+value['uid']+'">';
