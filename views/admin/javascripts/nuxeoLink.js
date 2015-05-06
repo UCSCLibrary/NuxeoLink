@@ -119,7 +119,7 @@ function addDamsBrowser() {
 		thumbBase = data['thumbBase'];
 		data = data['docs'];
 		if(data.length > 0)
-		    jQuery('#nuxeo-preview').html('<div id="select-buttons"><button id="select-all" class="select-button">Select All</button><button id="select-none" class="select-button">Select None</button></div><label id="numDocLi">'+data.length+' Documents <div style="font-size:0.8em">(displaying images only)</div></label><br><ul id="preview-list"></ul>');
+		    jQuery('#nuxeo-preview').html('<div id="select-buttons"><button id="select-all" class="select-button">Select All</button><button id="select-none" class="select-button">Select None</button></div><label id="numDocLi">'+data.length+' Documents <div style="font-size:0.8em">(Not displaying audio/video)</div></label><br><ul id="preview-list"></ul>');
 		else 
 		    jQuery('#nuxeo-preview').html('<h3>No documents found</h3><p>There are no documents directly inside the folder you have selected on the left. There may be documents inside subfolders.</p>');
 
