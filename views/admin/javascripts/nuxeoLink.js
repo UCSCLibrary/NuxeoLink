@@ -36,7 +36,7 @@ function implementSearch() {
 
 		jQuery.each(entries,function(index,value) {
 		    thumbUrl = thumbBase+value['uid']+"";
-		    console.log('thumburl: '+thumbUrl);
+//		    console.log('thumburl: '+thumbUrl);
 		    if((jQuery.inArray("Picture",value.facets)) < 0)
 		    {
 			console.log(value.facets);
@@ -116,7 +116,8 @@ function addDamsBrowser() {
 		    data={};
 		else
 		    data = jQuery.parseJSON(jsonData);
-
+		thumbBase = data['thumbBase'];
+		data = data['docs'];
 		if(data.length > 0)
 		    jQuery('#nuxeo-preview').html('<div id="select-buttons"><button id="select-all" class="select-button">Select All</button><button id="select-none" class="select-button">Select None</button></div><label id="numDocLi">'+data.length+' Documents <div style="font-size:0.8em">(displaying images only)</div></label><br><ul id="preview-list"></ul>');
 		else 
@@ -126,9 +127,10 @@ function addDamsBrowser() {
 		jQuery.each(data,function(index,value) {
 		    if(!('thumb' in value))
 			return true;
+		    thumbUrl = encodeURI(thumbBase+value['id'])+"?path=%2Fviews%2Fitem%5B3%5D%2Fcontent";
 		    prevLi = '<li id="preview-'+value['id']+'">';
 		    prevLi += '<input type="checkbox" class="import-check" checked="checked" name="toImport[]" value="'+value['path']+'" />';
-		    prevLi += '<img src="'+value['thumb']+'" />';
+		    prevLi += '<img src="'+thumbUrl+'" />';
 		    prevLi += "<p>"+value['text']+"</p>";
 		    prevLi += "</li>";
 		    jQuery('#preview-list').append(prevLi);

@@ -107,7 +107,6 @@ class NuxeoOmekaSession extends NuxeoSession {
             return false;
         $data->thumbBase = $this->getUrlLoggedIn()."/files/";
         return $data;
-        
     }
 
     function stream_download($Url) {
@@ -148,7 +147,9 @@ class NuxeoOmekaSession extends NuxeoSession {
         //$query="SELECT * FROM Document WHERE ecm:path startswith '$path' AND ecm:mixinType = 'Asset' ";
         $query="SELECT * FROM Document WHERE ecm:path startswith '$path' ";
         //return $this->_getDocs($query,$uid);
-        return $this->_getDocs($query,$path);
+        $docs = $this->_getDocs($query,$path);
+//        $docs->thumbBase = $
+        return array('thumbBase'=> $this->getUrlLoggedIn()."/files/",'docs'=>$docs);
     }
 
     public static function GetElementSlug($elementName) {
