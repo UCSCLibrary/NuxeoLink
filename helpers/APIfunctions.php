@@ -207,7 +207,11 @@ class NuxeoOmekaSession extends NuxeoSession {
             //This returns the primary file associated with the nuxeo item, which is bad because those are sometimes sensitive. 
             //$fileInfo = $doc->getProperty('file:content');
             $fileInfo = $doc->getImageInfo();
-            $filePath = $fileInfo['data'];
+            $uid = $doc->getUid();
+
+            //This does not work in Nuxeo 6.0 with the current authentication scheme            //$filePath = $fileInfo['data'];
+            $filePath = 'files/'.$uid.'?path=%2Fcontent';
+            
             $fileName = $fileInfo['name'];
 
             $this->addFile($filePath,$fileName,$item);
