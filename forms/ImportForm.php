@@ -55,6 +55,8 @@ class Nuxeo_Form_Import extends Omeka_Form
             'label' => __('Import Item(s)')
         ));
 
+	$this->addElement('hash','nuxeo_token');
+
 	//Display Groups:
         $this->addDisplayGroup(
 			       array(
