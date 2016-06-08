@@ -11,6 +11,8 @@ Please ensure that you have downloaded the most recent version of the NuxeoLink 
 
 **Configuration:**
 
+NOTE: The NuxeoLink plugin is currently incompatible with Omeka instances installed on the Windows operating system. Clients viewing the site in their browser can, of course, use Windows.  
+
 After obtaining the necessary credentials from the UCLDC team and installing the NuxeoLink plugin in Omeka, the Omeka administrator will need to configure the NuxeoLink plugin. This requires the following pieces of information:
 
 Nuxeo URL: [https://nuxeo.cdlib.org/Nuxeo/site/api/v1/automation](https://nuxeo.cdlib.org/Nuxeo/site/api/v1/automation)
@@ -23,11 +25,23 @@ You must also indicate whether or not you wish to use the UCLDC schema rather th
 
 **Understanding NuxeoLink Settings:**
 
-* **Images:**By default, NuxeoLink will not decrease the resolution of images. This means that images in Omeka will be available at the same resolution as the original UCLDC object.NuxeoLink will transform TIFFs into JPGs during import. Only the JPGs will be added into your Omeka system.
+* **Images:
+**By default, NuxeoLink will not decrease the resolution of images. This means that images in Omeka will be available at the same resolution as the original UCLDC object.
+NuxeoLink will transform TIFFs into JPGs during import. Only the JPGs will be added into your Omeka system.
 
-* **Audio/Video:**At this time, Audio/Video objects are being handled differently from images in UCLDC. NuxeoLink does not currently support Audio/Video object.
+* **Audio/Video:
+**At this time, Audio/Video objects are being handled differently from images in UCLDC. NuxeoLink does not currently support Audio/Video object.
 
-* **Metadata:**There are two options available for handling metadata. The first option is to use the 15 "core" Dublin Core fields available by default in Omeka and the second option is to use the UCLDC metadata scheme.The default configuration of the plugin is to use the 15 “core” Dublin Core field available by default in Omeka. By default, all of the metadata in UCLDC for a given object will be cross-walked into the 15 “core” Dublin Core fields available by default in Omeka. UCLDC metadata elements are cross-walked into these Dublin Core fields based on the “DC property” identified in the [UCLDC Metadata Model](https://wiki.library.ucsf.edu/display/UCLDC/Metadata+scheme). See [this table](https://docs.google.com/spreadsheets/d/1UYml7kcOgipWZxgx27-sqUXUUThMwRf55lV8gv8f1vY/edit?usp=sharing) for the mapping between UCLDC metadata and Omeka’s 15 “core” Dublin Core elements.If you prefer to maintain the metadata elements used in the UCLDC Metadata Model, you must check the box for “Use UCLDC schema?” box in the NuxeoLink configuration page. The metadata in UCLDC for a given object will be placed into a separate Omeka element set titled “UCLDC Schema” and 14 of the Dublin Core fields (all except for Title) in the default Omeka element set titled “Dublin Core” will be left blank. Title must be added to Omeka Dublin Core due to system constraints. If you use the UCLDC Metadata Scheme for your objects, we recommend either hiding the duplicate Title element either through your theme or through the [Hide Elements plugin](http://omeka.org/add-ons/plugins/hide-elements/).It is advisable to choose carefully between these two metadata configuration options. They will apply across the entire Omeka instance and once NuxeoLink is configured, altering the metadata configuration could result in loss of metadata for objects imported through the plugin.Metadata elements can always be edited after they are imported to Omeka.
+* **Metadata:
+**There are two options available for handling metadata. The first option is to use the 15 "core" Dublin Core fields available by default in Omeka and the second option is to use the UCLDC metadata scheme.
+
+The default configuration of the plugin is to use the 15 “core” Dublin Core field available by default in Omeka. By default, all of the metadata in UCLDC for a given object will be cross-walked into the 15 “core” Dublin Core fields available by default in Omeka. UCLDC metadata elements are cross-walked into these Dublin Core fields based on the “DC property” identified in the [UCLDC Metadata Model](https://wiki.library.ucsf.edu/display/UCLDC/Metadata+scheme). See [this table](https://docs.google.com/spreadsheets/d/1UYml7kcOgipWZxgx27-sqUXUUThMwRf55lV8gv8f1vY/edit?usp=sharing) for the mapping between UCLDC metadata and Omeka’s 15 “core” Dublin Core elements.
+
+If you prefer to maintain the metadata elements used in the UCLDC Metadata Model, you must check the box for “Use UCLDC schema?” box in the NuxeoLink configuration page. The metadata in UCLDC for a given object will be placed into a separate Omeka element set titled “UCLDC Schema” and 14 of the Dublin Core fields (all except for Title) in the default Omeka element set titled “Dublin Core” will be left blank. Title must be added to Omeka Dublin Core due to system constraints. If you use the UCLDC Metadata Scheme for your objects, we recommend either hiding the duplicate Title element either through your theme or through the [Hide Elements plugin](http://omeka.org/add-ons/plugins/hide-elements/).
+
+It is advisable to choose carefully between these two metadata configuration options. They will apply across the entire Omeka instance and once NuxeoLink is configured, altering the metadata configuration could result in loss of metadata for objects imported through the plugin.
+
+Metadata elements can always be edited after they are imported to Omeka.
 
 **Importing UCLDC Objects:**
 
